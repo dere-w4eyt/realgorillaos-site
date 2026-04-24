@@ -13,121 +13,33 @@
             min-height: 100vh;
         }
         .navbar {
-            background: #111;
-            border-bottom: 2px solid #019999;
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: #111; border-bottom: 2px solid #019999;
+            padding: 15px 30px; display: flex; align-items: center;
+            justify-content: space-between; position: sticky; top: 0; z-index: 100;
         }
         .navbar .logo { font-size: 1.5em; color: #019999; font-weight: bold; text-decoration: none; }
         .navbar .nav-links { display: flex; gap: 20px; }
         .navbar .nav-links a { color: #aaa; text-decoration: none; font-size: 0.9em; }
         .navbar .nav-links a:hover, .navbar .nav-links a.active { color: #019999; }
-        .search-box {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            padding: 8px 15px;
-            border-radius: 20px;
-            color: white;
-            font-size: 0.9em;
-            width: 200px;
-        }
+        .search-box { background: #1a1a1a; border: 1px solid #333; padding: 8px 15px; border-radius: 20px; color: white; font-size: 0.9em; width: 200px; }
         .search-box:focus { outline: none; border-color: #019999; }
-        .hero {
-            background: linear-gradient(135deg, #019999 0%, #090506 100%);
-            padding: 60px 30px;
-            display: flex;
-            align-items: center;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
+        .hero { background: linear-gradient(135deg, #019999 0%, #090506 100%); padding: 60px 30px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
         .hero-icon { font-size: 6em; flex-shrink: 0; }
         .hero-content h1 { font-size: 2.5em; margin-bottom: 10px; }
         .hero-content p { color: #ccc; font-size: 1.1em; margin-bottom: 20px; line-height: 1.5; }
-        .hero-content .rating { color: #ffcc00; font-size: 1.2em; margin-bottom: 10px; }
-        .hero-btn {
-            background: #000;
-            color: #019999;
-            padding: 12px 30px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            font-size: 1.1em;
-        }
+        .hero-btn { background: #000; color: #019999; padding: 12px 30px; border-radius: 10px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 1.1em; }
         .hero-btn:hover { background: #fff; color: #000; }
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
-        .section-title {
-            font-size: 1.8em;
-            margin: 40px 0 20px;
-            color: #019999;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .section-title { font-size: 1.8em; margin: 40px 0 20px; color: #019999; display: flex; align-items: center; gap: 10px; }
         .section-title .count { font-size: 0.5em; color: #666; }
-        .categories {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        .category-btn {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #aaa;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85em;
-            transition: all 0.2s;
-        }
-        .category-btn:hover, .category-btn.active {
-            background: #019999;
-            color: #000;
-            border-color: #019999;
-        }
-        .extensions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .ext-card {
-            background: #1a1a1a;
-            border: 1px solid #222;
-            border-radius: 15px;
-            padding: 20px;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-        .ext-card:hover {
-            border-color: #019999;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(1,153,153,0.1);
-        }
-        .ext-card .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .ext-card .card-icon {
-            font-size: 2.5em;
-            width: 60px;
-            height: 60px;
-            background: #0a0a0a;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
+        .categories { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+        .category-btn { background: #1a1a1a; border: 1px solid #333; color: #aaa; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+        .category-btn:hover, .category-btn.active { background: #019999; color: #000; border-color: #019999; }
+        .extensions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .ext-card { background: #1a1a1a; border: 1px solid #222; border-radius: 15px; padding: 20px; transition: all 0.2s; display: flex; flex-direction: column; }
+        .ext-card:hover { border-color: #019999; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(1,153,153,0.1); }
+        .ext-card .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .ext-card .card-icon { font-size: 2.5em; width: 60px; height: 60px; background: #0a0a0a; border-radius: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
         .ext-card .card-icon img { width: 100%; height: 100%; object-fit: cover; }
         .ext-card .card-info h3 { font-size: 1.1em; margin-bottom: 2px; }
         .ext-card .card-info h3 a { color: white; text-decoration: none; }
@@ -135,77 +47,25 @@
         .ext-card .card-info .developer { font-size: 0.8em; color: #666; }
         .ext-card .stars { color: #ffcc00; font-size: 0.85em; margin: 5px 0; }
         .ext-card .description { color: #aaa; font-size: 0.85em; line-height: 1.5; flex-grow: 1; margin-bottom: 15px; }
-        .ext-card .meta {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-        .badge {
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.7em;
-            font-weight: bold;
-        }
+        .ext-card .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .badge { padding: 4px 10px; border-radius: 15px; font-size: 0.7em; font-weight: bold; }
         .badge-verified { background: #019999; color: #000; }
         .badge-type { background: #333; color: #aaa; }
-        .badge-trending { background: #ff6600; color: #fff; }
         .badge-new { background: #6600ff; color: #fff; }
-        .install-btn {
-            background: #019999;
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9em;
-            text-align: center;
-            display: block;
-            transition: all 0.2s;
-        }
+        .install-btn { background: #019999; color: #000; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 0.9em; text-align: center; display: block; transition: all 0.2s; }
         .install-btn:hover { background: #fff; }
-        .featured-banner {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 2px solid #019999;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
+        .detail-btn { background: #333; color: #019999; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 0.9em; text-align: center; display: block; transition: all 0.2s; margin-top: 8px; }
+        .detail-btn:hover { background: #019999; color: #000; }
+        .featured-banner { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 2px solid #019999; border-radius: 15px; padding: 30px; margin: 30px 0; display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
         .featured-banner .banner-icon { font-size: 4em; }
         .featured-banner h2 { color: #019999; margin-bottom: 5px; }
         .featured-banner .tagline { color: #ccc; }
-        .submit-banner {
-            background: #1a1a1a;
-            border: 2px dashed #019999;
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            margin: 40px 0;
-        }
+        .submit-banner { background: #1a1a1a; border: 2px dashed #019999; border-radius: 15px; padding: 40px; text-align: center; margin: 40px 0; }
         .submit-banner h2 { color: #019999; margin-bottom: 10px; }
         .submit-banner p { color: #aaa; margin-bottom: 20px; }
-        .submit-btn {
-            background: #019999;
-            color: #000;
-            padding: 14px 35px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
+        .submit-btn { background: #019999; color: #000; padding: 14px 35px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 1.1em; }
         .submit-btn:hover { background: #fff; }
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #444;
-            font-size: 0.8em;
-            border-top: 1px solid #111;
-            margin-top: 40px;
-        }
+        footer { text-align: center; padding: 30px; color: #444; font-size: 0.8em; border-top: 1px solid #111; margin-top: 40px; }
         footer a { color: #019999; text-decoration: none; }
         .loading { text-align: center; padding: 40px; color: #666; font-size: 1.2em; }
         .no-results { text-align: center; padding: 40px; color: #666; }
@@ -233,10 +93,9 @@
     <div class="hero">
         <div class="hero-icon">🦍</div>
         <div class="hero-content">
-            <h1>RealGorilla Ad Blocker</h1>
-            <div class="rating">★★★★★ 4.9 • 1K+ users • Featured</div>
-            <p>The #1 ad blocking extension for RealGorilla Browser. Blocks pop-ups, trackers, and annoying banners. Verified clean by VirusTotal.</p>
-            <a href="app.html?id=1" class="hero-btn">⬇ View Details</a>
+            <h1>RealGorilla Store</h1>
+            <p>Verified extensions for RealGorilla Browser. All submissions scanned with VirusTotal for your safety.</p>
+            <a href="submit.html" class="hero-btn">🚀 Submit Your Extension</a>
         </div>
     </div>
 
@@ -245,7 +104,7 @@
             <div class="banner-icon">🔍</div>
             <div>
                 <h2>🔒 Every Extension Scanned</h2>
-                <p class="tagline">All extensions are verified with <strong>VirusTotal</strong> before appearing in the store. Your safety is our priority.</p>
+                <p class="tagline">All extensions are verified with <strong>VirusTotal</strong> before appearing in the store.</p>
             </div>
         </div>
 
@@ -259,17 +118,17 @@
 
         <div class="section-title">📦 All Extensions <span class="count" id="ext-count"></span></div>
         <div id="extensions-grid" class="extensions-grid loading">🔄 Loading extensions...</div>
-        <div id="no-results" class="no-results" style="display:none;">😕 No extensions found. Try a different filter.</div>
+        <div id="no-results" class="no-results" style="display:none;">😕 No extensions found.</div>
 
         <div class="submit-banner">
             <h2>🚀 Got an Extension?</h2>
-            <p>Share your creation with the RealGorilla community. All submissions are automatically scanned for security.</p>
+            <p>Share your creation with the RealGorilla community.</p>
             <a href="submit.html" class="submit-btn">Submit Your Extension</a>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 <a href="https://dere-w4eyt.github.io/realgorillaos-site/">RealGorillaOS</a> — All extensions verified with VirusTotal | <a href="https://dere-w4eyt.github.io/realgorillaos-site/">← Back to Main Site</a>
+        &copy; 2026 <a href="https://dere-w4eyt.github.io/realgorillaos-site/">RealGorillaOS</a> | <a href="https://dere-w4eyt.github.io/realgorillaos-site/">← Back to Main Site</a>
     </footer>
 
     <script>
@@ -296,8 +155,9 @@
             noResults.style.display = 'none';
             grid.innerHTML = filtered.map((ext, i) => {
                 const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
-                const rating = ext.rating ? ext.rating.toFixed(1) : (4 + Math.random()).toFixed(1);
-                const downloads = ext.downloads || Math.floor(Math.random() * 5000) + 100;
+                const rating = ext.rating ? ext.rating.toFixed(1) : '0.0';
+                const downloads = ext.downloads || 0;
+                const ratingCount = ext.rating_count || 0;
                 const isNew = i === allExtensions.length - 1;
                 return `
                     <div class="ext-card">
@@ -306,17 +166,17 @@
                             <div class="card-info">
                                 <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
                                 <div class="developer">by ${ext.author}</div>
-                                <div class="stars">★★★★★ ${rating} • ${downloads.toLocaleString()} downloads</div>
+                                <div class="stars">★★★★★ ${rating} • ${ratingCount} reviews • ${downloads.toLocaleString()} downloads</div>
                             </div>
                         </div>
                         <div class="meta">
                             <span class="badge badge-verified">✅ Verified</span>
                             <span class="badge badge-type">${ext.type}</span>
                             ${isNew ? '<span class="badge badge-new">NEW</span>' : ''}
-                            ${downloads > 2000 ? '<span class="badge badge-trending">🔥 TRENDING</span>' : ''}
                         </div>
                         <p class="description">${ext.description}</p>
-                        <a href="app.html?id=${ext.id}" class="install-btn">📄 View Details</a>
+                        <a href="${ext.url}" target="_blank" class="install-btn">⬇ Install</a>
+                        <a href="app.html?id=${ext.id}" class="detail-btn">📄 View Details & Reviews</a>
                     </div>
                 `;
             }).join('');
@@ -349,7 +209,8 @@
                             <span class="badge badge-type">${ext.type}</span>
                         </div>
                         <p class="description">${ext.description}</p>
-                        <a href="app.html?id=${ext.id}" class="install-btn">📄 View Details</a>
+                        <a href="${ext.url}" target="_blank" class="install-btn">⬇ Install</a>
+                        <a href="app.html?id=${ext.id}" class="detail-btn">📄 View Details & Reviews</a>
                     </div>
                 `;
             }).join('') || '<p class="no-results">😕 No extensions found.</p>';
