@@ -43,6 +43,35 @@
             0% { transform: rotate(-5deg); }
             100% { transform: rotate(5deg); }
         }
+        .download-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .download {
+            background: #019999;
+            color: #000;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .download:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
+        .download.os {
+            background: #fff;
+            color: #000;
+        }
+        .download.os:hover {
+            background: #019999;
+        }
         .features {
             display: flex;
             justify-content: center;
@@ -66,22 +95,6 @@
         .card .icon { font-size: 3em; margin-bottom: 15px; }
         .card h2 { color: #019999; margin-bottom: 10px; }
         .card p { color: #aaa; font-size: 0.95em; }
-        .download {
-            background: #019999;
-            color: #000;
-            padding: 15px 40px;
-            font-size: 1.3em;
-            font-weight: bold;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 30px;
-            transition: all 0.2s;
-        }
-        .download:hover {
-            background: #fff;
-            transform: scale(1.05);
-        }
         footer {
             padding: 20px;
             color: #444;
@@ -94,9 +107,10 @@
     <div class="hero">
         <div class="emoji">🦍</div>
         <h1>RealGorillaOS</h1>
-        <p class="tagline">The operating system built by stinky ground player, for ground players.</p>
-        <div>
-            <a href="#" class="download">⬇ Download Coming Soon</a>
+        <p class="tagline">The operating system built by stinky ground players, for ground players.</p>
+                <div class="download-buttons">
+            <a href="https://github.com/dere-w4eyt/RealGorillaOS/releases/tag/v1.5.2" class="download os">💿 Download RealGorillaOS</a>
+            <a href="https://github.com/dere-w4eyt/realgorilla-browser/releases/tag/v1.0.1" class="download">🦍 Download Browser</a>
         </div>
     </div>
 
@@ -109,12 +123,12 @@
         <div class="card">
             <div class="icon">🦍</div>
             <h2>Gorilla Themed</h2>
-            <p>Every pixel inspired by Gorilla Tag. also start using my wonky OS. its pritty tuff.</p>
+            <p>Every pixel inspired by Gorilla Tag. Start using my wonky OS. It's pretty tuff.</p>
         </div>
         <div class="card">
             <div class="icon">🧠</div>
             <h2>AI Powered</h2>
-            <p>Built-in DeepSeek AI ready to answer your calls from the treetops.</p>
+            <p>Built-in AI ready to answer your calls from the treetops.</p>
         </div>
     </div>
 
