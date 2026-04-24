@@ -72,6 +72,18 @@
         .download.os:hover {
             background: #019999;
         }
+        .extensions-link {
+            margin-top: 15px;
+        }
+        .extensions-link a {
+            color: #019999;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .extensions-link a:hover {
+            color: #fff;
+        }
         .features {
             display: flex;
             justify-content: center;
@@ -87,10 +99,14 @@
             padding: 30px;
             width: 250px;
             transition: transform 0.2s;
+            cursor: default;
         }
         .card:hover {
             transform: translateY(-5px);
             border-color: #fff;
+        }
+        .card.clickable {
+            cursor: pointer;
         }
         .card .icon { font-size: 3em; margin-bottom: 15px; }
         .card h2 { color: #019999; margin-bottom: 10px; }
@@ -108,9 +124,12 @@
         <div class="emoji">🦍</div>
         <h1>RealGorillaOS</h1>
         <p class="tagline">The operating system built by stinky ground players, for ground players.</p>
-                <div class="download-buttons">
+        <div class="download-buttons">
             <a href="https://github.com/dere-w4eyt/RealGorillaOS/releases/tag/v1.5.2" class="download os">💿 Download RealGorillaOS</a>
             <a href="https://github.com/dere-w4eyt/realgorilla-browser/releases/tag/v1.0.1" class="download">🦍 Download Browser</a>
+        </div>
+        <div class="extensions-link">
+            <a href="extensions.html">🧩 Browse Extensions →</a>
         </div>
     </div>
 
@@ -128,7 +147,12 @@
         <div class="card">
             <div class="icon">🧠</div>
             <h2>AI Powered</h2>
-            <p>Built-in AI ready to answer your calls from the treetops.</p>
+            <p>Built-in AI ready to answer your calls.</p>
+        </div>
+        <div class="card clickable" onclick="window.location.href='extensions.html'">
+            <div class="icon">🧩</div>
+            <h2>Extensions</h2>
+            <p>Customize your browser with verified extensions. Ad blocking, themes, and more.</p>
         </div>
     </div>
 
