@@ -73,6 +73,10 @@
                 <input type="url" id="ext-url" placeholder="https://github.com/you/extension" required>
             </div>
             <div class="form-group">
+                <label>🖼️ Extension Icon URL (optional)</label>
+                <input type="url" id="ext-image" placeholder="https://example.com/icon.png">
+            </div>
+            <div class="form-group">
                 <label>📧 Your Email (for verification)</label>
                 <input type="email" id="ext-email" placeholder="you@example.com" required>
             </div>
@@ -97,6 +101,7 @@
                 author: document.getElementById('ext-author').value,
                 description: document.getElementById('ext-desc').value,
                 url: document.getElementById('ext-url').value,
+                image_url: document.getElementById('ext-image').value,
                 email: document.getElementById('ext-email').value
             };
             
@@ -110,7 +115,7 @@
                 
                 if (result.status === 'approved') {
                     status.className = 'success';
-                    status.innerHTML = `✅ Extension "${data.name}" passed security scan! It will appear on the extensions page within 24 hours.`;
+                    status.innerHTML = `✅ Extension "${data.name}" passed security scan! It will appear on the extensions page shortly.`;
                 } else if (result.status === 'scanning') {
                     status.className = 'scanning';
                     status.innerHTML = '🔍 Your extension is being scanned. Check back in a few minutes.';

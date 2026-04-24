@@ -12,7 +12,6 @@
             color: white;
             min-height: 100vh;
         }
-        
         .navbar {
             background: #111;
             border-bottom: 2px solid #019999;
@@ -38,7 +37,6 @@
             width: 200px;
         }
         .search-box:focus { outline: none; border-color: #019999; }
-        
         .hero {
             background: linear-gradient(135deg, #019999 0%, #090506 100%);
             padding: 60px 30px;
@@ -62,9 +60,7 @@
             font-size: 1.1em;
         }
         .hero-btn:hover { background: #fff; color: #000; }
-        
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
-        
         .section-title {
             font-size: 1.8em;
             margin: 40px 0 20px;
@@ -74,7 +70,6 @@
             gap: 10px;
         }
         .section-title .count { font-size: 0.5em; color: #666; }
-        
         .categories {
             display: flex;
             gap: 10px;
@@ -96,13 +91,11 @@
             color: #000;
             border-color: #019999;
         }
-        
         .extensions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
-        
         .ext-card {
             background: #1a1a1a;
             border: 1px solid #222;
@@ -133,8 +126,12 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            overflow: hidden;
         }
-        .ext-card .card-info h3 { font-size: 1.1em; color: white; margin-bottom: 2px; }
+        .ext-card .card-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .ext-card .card-info h3 { font-size: 1.1em; margin-bottom: 2px; }
+        .ext-card .card-info h3 a { color: white; text-decoration: none; }
+        .ext-card .card-info h3 a:hover { color: #019999; }
         .ext-card .card-info .developer { font-size: 0.8em; color: #666; }
         .ext-card .stars { color: #ffcc00; font-size: 0.85em; margin: 5px 0; }
         .ext-card .description { color: #aaa; font-size: 0.85em; line-height: 1.5; flex-grow: 1; margin-bottom: 15px; }
@@ -167,7 +164,6 @@
             transition: all 0.2s;
         }
         .install-btn:hover { background: #fff; }
-        
         .featured-banner {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border: 2px solid #019999;
@@ -182,7 +178,6 @@
         .featured-banner .banner-icon { font-size: 4em; }
         .featured-banner h2 { color: #019999; margin-bottom: 5px; }
         .featured-banner .tagline { color: #ccc; }
-        
         .submit-banner {
             background: #1a1a1a;
             border: 2px dashed #019999;
@@ -203,7 +198,6 @@
             font-size: 1.1em;
         }
         .submit-btn:hover { background: #fff; }
-        
         footer {
             text-align: center;
             padding: 30px;
@@ -213,10 +207,8 @@
             margin-top: 40px;
         }
         footer a { color: #019999; text-decoration: none; }
-        
         .loading { text-align: center; padding: 40px; color: #666; font-size: 1.2em; }
         .no-results { text-align: center; padding: 40px; color: #666; }
-        
         @media (max-width: 768px) {
             .hero { padding: 30px 20px; text-align: center; flex-direction: column; }
             .hero-content h1 { font-size: 1.8em; }
@@ -244,7 +236,7 @@
             <h1>RealGorilla Ad Blocker</h1>
             <div class="rating">★★★★★ 4.9 • 1K+ users • Featured</div>
             <p>The #1 ad blocking extension for RealGorilla Browser. Blocks pop-ups, trackers, and annoying banners. Verified clean by VirusTotal.</p>
-            <a href="https://github.com/dere-w4eyt/realgorilla-browser" target="_blank" class="hero-btn">⬇ Install Now</a>
+            <a href="app.html?id=1" class="hero-btn">⬇ View Details</a>
         </div>
     </div>
 
@@ -290,39 +282,29 @@
                 allExtensions = await response.json();
                 renderExtensions();
             } catch (err) {
-                document.getElementById('extensions-grid').innerHTML = '<p style="color:#ff4444;">⚠️ Could not load extensions. Make sure the worker is deployed.</p>';
+                document.getElementById('extensions-grid').innerHTML = '<p style="color:#ff4444;">⚠️ Could not load extensions.</p>';
             }
         }
         
         function renderExtensions() {
             let filtered = currentFilter === 'all' ? allExtensions : allExtensions.filter(e => e.type === currentFilter);
-            
             const grid = document.getElementById('extensions-grid');
             const count = document.getElementById('ext-count');
             const noResults = document.getElementById('no-results');
-            
             count.textContent = `(${filtered.length})`;
-            
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                noResults.style.display = 'block';
-                return;
-            }
-            
+            if (filtered.length === 0) { grid.innerHTML = ''; noResults.style.display = 'block'; return; }
             noResults.style.display = 'none';
-            
             grid.innerHTML = filtered.map((ext, i) => {
-                const icon = ext.icon || (ext.type === 'adblock' ? '🛡️' : ext.type === 'theme' ? '🎨' : ext.type === 'privacy' ? '🔒' : '🔧');
+                const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
                 const rating = ext.rating ? ext.rating.toFixed(1) : (4 + Math.random()).toFixed(1);
                 const downloads = ext.downloads || Math.floor(Math.random() * 5000) + 100;
                 const isNew = i === allExtensions.length - 1;
-                
                 return `
                     <div class="ext-card">
                         <div class="card-header">
-                            <div class="card-icon">${icon}</div>
+                            <div class="card-icon">${iconHtml}</div>
                             <div class="card-info">
-                                <h3>${ext.name}</h3>
+                                <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
                                 <div class="developer">by ${ext.author}</div>
                                 <div class="stars">★★★★★ ${rating} • ${downloads.toLocaleString()} downloads</div>
                             </div>
@@ -334,7 +316,7 @@
                             ${downloads > 2000 ? '<span class="badge badge-trending">🔥 TRENDING</span>' : ''}
                         </div>
                         <p class="description">${ext.description}</p>
-                        <a href="${ext.url}" target="_blank" class="install-btn">⬇ Install</a>
+                        <a href="app.html?id=${ext.id}" class="install-btn">📄 View Details</a>
                     </div>
                 `;
             }).join('');
@@ -348,24 +330,17 @@
         }
         
         function searchExtensions(query) {
-            if (!query) {
-                renderExtensions();
-                return;
-            }
+            if (!query) { renderExtensions(); return; }
             const q = query.toLowerCase();
-            const filtered = allExtensions.filter(e => 
-                e.name.toLowerCase().includes(q) || 
-                e.description.toLowerCase().includes(q) ||
-                e.author.toLowerCase().includes(q)
-            );
+            const filtered = allExtensions.filter(e => e.name.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) || e.author.toLowerCase().includes(q));
             document.getElementById('extensions-grid').innerHTML = filtered.map((ext, i) => {
-                const icon = ext.icon || (ext.type === 'adblock' ? '🛡️' : ext.type === 'theme' ? '🎨' : ext.type === 'privacy' ? '🔒' : '🔧');
+                const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
                 return `
                     <div class="ext-card">
                         <div class="card-header">
-                            <div class="card-icon">${icon}</div>
+                            <div class="card-icon">${iconHtml}</div>
                             <div class="card-info">
-                                <h3>${ext.name}</h3>
+                                <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
                                 <div class="developer">by ${ext.author}</div>
                             </div>
                         </div>
@@ -374,10 +349,10 @@
                             <span class="badge badge-type">${ext.type}</span>
                         </div>
                         <p class="description">${ext.description}</p>
-                        <a href="${ext.url}" target="_blank" class="install-btn">⬇ Install</a>
+                        <a href="app.html?id=${ext.id}" class="install-btn">📄 View Details</a>
                     </div>
                 `;
-            }).join('') || '<p class="no-results">😕 No extensions found for "' + query + '"</p>';
+            }).join('') || '<p class="no-results">😕 No extensions found.</p>';
         }
         
         loadExtensions();
