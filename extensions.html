@@ -27,31 +27,31 @@
             padding: 25px;
             margin: 20px 0;
         }
-        .ext-card h2 { color: #019999; margin-bottom: 10px; }
-        .ext-card .version { font-size: 0.8em; color: #666; }
+        .ext-card h2 { color: #019999; margin-bottom: 5px; }
+        .ext-card .author { color: #666; font-size: 0.9em; margin-bottom: 10px; }
         .ext-card p { color: #aaa; margin: 10px 0; line-height: 1.5; }
-        .ext-card .verified {
-            background: #019999;
-            color: #000;
+        .ext-card .badge {
+            display: inline-block;
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.8em;
             font-weight: bold;
-            display: inline-block;
-            margin: 10px 0;
+            margin: 5px 5px 5px 0;
         }
-        .download-btn {
+        .badge-verified { background: #019999; color: #000; }
+        .badge-type { background: #333; color: #aaa; }
+        .badge-vt { background: #1a3a1a; color: #019999; cursor: pointer; text-decoration: none; }
+        .ext-card .actions { margin-top: 15px; }
+        .install-btn {
             background: #019999;
             color: #000;
-            padding: 12px 30px;
+            padding: 10px 25px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
             display: inline-block;
-            margin-top: 10px;
-            transition: all 0.2s;
         }
-        .download-btn:hover { background: #fff; transform: scale(1.05); }
+        .install-btn:hover { background: #fff; }
         .submit-section {
             text-align: center;
             margin: 30px 0;
@@ -73,6 +73,12 @@
             display: inline-block;
         }
         .submit-btn:hover { background: #fff; }
+        .stats {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-size: 0.9em;
+        }
         .back-link {
             display: inline-block;
             margin-top: 30px;
@@ -86,6 +92,11 @@
             color: #444;
             font-size: 0.8em;
         }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -95,31 +106,8 @@
     </div>
 
     <div class="container">
-        <div class="ext-card">
-            <h2>🦍 RealGorilla Ad Blocker <span class="version">v1.0.0</span></h2>
-            <span class="verified">✅ VirusTotal Verified</span>
-            <p>Blocks annoying ads, pop-ups, and trackers on websites. Built-in and enabled by default in RealGorilla Browser v1.2.0+.</p>
-            <p><b>Type:</b> adblock | <b>Domains blocked:</b> 60+</p>
-            <p><b>🔒 Verified:</b> <a href="https://www.virustotal.com" style="color:#019999;" target="_blank">Check on VirusTotal</a></p>
-        </div>
-
-        <div class="ext-card">
-            <h2>🎨 Dark Mode Override</h2>
-            <span class="verified" style="background:#666;">🔜 Coming Soon</span>
-            <p>Forces dark mode on all websites for comfortable browsing at night.</p>
-        </div>
-
-        <div class="ext-card">
-            <h2>🔒 Privacy Shield</h2>
-            <span class="verified" style="background:#666;">🔜 Coming Soon</span>
-            <p>Blocks trackers, fingerprinting, and third-party cookies.</p>
-        </div>
-
-        <div class="ext-card">
-            <h2>📝 User Scripts</h2>
-            <span class="verified" style="background:#666;">🔜 Coming Soon</span>
-            <p>Install custom scripts to modify website behavior. Coming in a future update.</p>
-        </div>
+        <div class="stats" id="stats"></div>
+        <div id="extensions-list" class="loading">🔄 Loading extensions...</div>
 
         <div class="submit-section">
             <h3>🚀 Got an Extension?</h3>
@@ -131,7 +119,47 @@
     </div>
 
     <footer>
-        &copy; 2026 RealGorillaOS — Extensions verified with VirusTotal before listing
+        &copy; 2026 RealGorillaOS — All extensions verified with VirusTotal
     </footer>
+
+    <script>
+        async function loadExtensions() {
+            try {
+                const response = await fetch('extensions.json');
+                const extensions = await response.json();
+                
+                const list = document.getElementById('extensions-list');
+                const stats = document.getElementById('stats');
+                
+                const verified = extensions.filter(e => e.verified).length;
+                const total = extensions.length;
+                
+                stats.innerHTML = `📊 <b>${total}</b> extensions | <b>${verified}</b> verified with VirusTotal`;
+                
+                if (extensions.length === 0) {
+                    list.innerHTML = '<p style="text-align:center;color:#666;">No extensions yet. Be the first to submit!</p>';
+                    return;
+                }
+                
+                list.innerHTML = extensions.map(ext => `
+                    <div class="ext-card">
+                        <h2>${ext.name} <span style="font-size:0.7em;color:#666;">v${ext.version}</span></h2>
+                        <div class="author">by ${ext.author} — ${ext.date}</div>
+                        <span class="badge badge-verified">✅ VirusTotal Verified</span>
+                        <span class="badge badge-type">${ext.type}</span>
+                        <a href="https://www.virustotal.com" target="_blank" class="badge badge-vt">🔍 Check on VirusTotal</a>
+                        <p>${ext.description}</p>
+                        <div class="actions">
+                            <a href="${ext.url}" target="_blank" class="install-btn">⬇ Install</a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                document.getElementById('extensions-list').innerHTML = '<p style="text-align:center;color:#ff4444;">⚠️ Could not load extensions. Please try again later.</p>';
+            }
+        }
+        
+        loadExtensions();
+    </script>
 </body>
 </html>
