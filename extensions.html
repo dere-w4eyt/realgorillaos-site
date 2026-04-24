@@ -13,7 +13,6 @@
             min-height: 100vh;
         }
         
-        /* Navigation */
         .navbar {
             background: #111;
             border-bottom: 2px solid #019999;
@@ -40,7 +39,6 @@
         }
         .search-box:focus { outline: none; border-color: #019999; }
         
-        /* Hero */
         .hero {
             background: linear-gradient(135deg, #019999 0%, #090506 100%);
             padding: 60px 30px;
@@ -65,10 +63,8 @@
         }
         .hero-btn:hover { background: #fff; color: #000; }
         
-        /* Container */
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
         
-        /* Section Titles */
         .section-title {
             font-size: 1.8em;
             margin: 40px 0 20px;
@@ -79,7 +75,6 @@
         }
         .section-title .count { font-size: 0.5em; color: #666; }
         
-        /* Categories */
         .categories {
             display: flex;
             gap: 10px;
@@ -102,14 +97,12 @@
             border-color: #019999;
         }
         
-        /* Grid */
         .extensions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
         
-        /* Card */
         .ext-card {
             background: #1a1a1a;
             border: 1px solid #222;
@@ -175,7 +168,6 @@
         }
         .install-btn:hover { background: #fff; }
         
-        /* Featured Banner */
         .featured-banner {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border: 2px solid #019999;
@@ -191,7 +183,6 @@
         .featured-banner h2 { color: #019999; margin-bottom: 5px; }
         .featured-banner .tagline { color: #ccc; }
         
-        /* Submit Section */
         .submit-banner {
             background: #1a1a1a;
             border: 2px dashed #019999;
@@ -235,7 +226,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <a href="extensions.html" class="logo">🧩 RealGorilla Store</a>
         <div class="nav-links">
@@ -248,7 +238,6 @@
         <input type="text" class="search-box" placeholder="🔍 Search extensions..." oninput="searchExtensions(this.value)">
     </nav>
 
-    <!-- Hero -->
     <div class="hero">
         <div class="hero-icon">🦍</div>
         <div class="hero-content">
@@ -260,7 +249,6 @@
     </div>
 
     <div class="container">
-        <!-- Featured Banner -->
         <div class="featured-banner">
             <div class="banner-icon">🔍</div>
             <div>
@@ -269,7 +257,6 @@
             </div>
         </div>
 
-        <!-- Categories -->
         <div class="categories">
             <button class="category-btn active" onclick="filterExtensions('all')">All</button>
             <button class="category-btn" onclick="filterExtensions('adblock')">🛡️ Ad Blockers</button>
@@ -278,12 +265,10 @@
             <button class="category-btn" onclick="filterExtensions('tools')">🔧 Tools</button>
         </div>
 
-        <!-- Extensions Grid -->
         <div class="section-title">📦 All Extensions <span class="count" id="ext-count"></span></div>
         <div id="extensions-grid" class="extensions-grid loading">🔄 Loading extensions...</div>
         <div id="no-results" class="no-results" style="display:none;">😕 No extensions found. Try a different filter.</div>
 
-        <!-- Submit -->
         <div class="submit-banner">
             <h2>🚀 Got an Extension?</h2>
             <p>Share your creation with the RealGorilla community. All submissions are automatically scanned for security.</p>
@@ -301,11 +286,11 @@
         
         async function loadExtensions() {
             try {
-                const response = await fetch('extensions.json');
+                const response = await fetch('https://extensions-worker.realgorilla.workers.dev/extensions');
                 allExtensions = await response.json();
                 renderExtensions();
             } catch (err) {
-                document.getElementById('extensions-grid').innerHTML = '<p style="color:#ff4444;">⚠️ Could not load extensions.</p>';
+                document.getElementById('extensions-grid').innerHTML = '<p style="color:#ff4444;">⚠️ Could not load extensions. Make sure the worker is deployed.</p>';
             }
         }
         
@@ -327,9 +312,9 @@
             noResults.style.display = 'none';
             
             grid.innerHTML = filtered.map((ext, i) => {
-                const icon = ext.type === 'adblock' ? '🛡️' : ext.type === 'theme' ? '🎨' : ext.type === 'privacy' ? '🔒' : '🔧';
-                const rating = (4 + Math.random()).toFixed(1); // Simulated rating
-                const downloads = Math.floor(Math.random() * 5000) + 100;
+                const icon = ext.icon || (ext.type === 'adblock' ? '🛡️' : ext.type === 'theme' ? '🎨' : ext.type === 'privacy' ? '🔒' : '🔧');
+                const rating = ext.rating ? ext.rating.toFixed(1) : (4 + Math.random()).toFixed(1);
+                const downloads = ext.downloads || Math.floor(Math.random() * 5000) + 100;
                 const isNew = i === allExtensions.length - 1;
                 
                 return `
@@ -374,7 +359,7 @@
                 e.author.toLowerCase().includes(q)
             );
             document.getElementById('extensions-grid').innerHTML = filtered.map((ext, i) => {
-                const icon = ext.type === 'adblock' ? '🛡️' : ext.type === 'theme' ? '🎨' : ext.type === 'privacy' ? '🔒' : '🔧';
+                const icon = ext.icon || (ext.type === 'adblock' ? '🛡️' : ext.type === 'theme' ? '🎨' : ext.type === 'privacy' ? '🔒' : '🔧');
                 return `
                     <div class="ext-card">
                         <div class="card-header">
