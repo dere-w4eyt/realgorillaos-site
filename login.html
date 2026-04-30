@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - RealGorilla Extensions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: #1a1a1a;
+            border: 2px solid #019999;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .login-container h1 { color: #019999; margin-bottom: 10px; font-size: 2em; }
+        .login-container p { color: #aaa; margin-bottom: 25px; font-size: 0.9em; }
+        .login-container input {
+            width: 100%; padding: 12px; margin: 8px 0;
+            border-radius: 8px; border: 1px solid #333;
+            background: #0a0a0a; color: white; font-size: 14px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .login-container input:focus { outline: none; border-color: #019999; }
+        .login-btn {
+            width: 100%; padding: 12px; margin: 10px 0;
+            border-radius: 8px; border: none; cursor: pointer;
+            font-size: 14px; font-weight: bold;
+        }
+        .btn-google { background: #fff; color: #000; }
+        .btn-google:hover { background: #ddd; }
+        .btn-email { background: #019999; color: #000; }
+        .btn-email:hover { background: #00cccc; }
+        .btn-signup { background: transparent; color: #019999; border: 2px solid #019999; }
+        .btn-signup:hover { background: #019999; color: #000; }
+        .divider {
+            display: flex; align-items: center; gap: 10px;
+            color: #666; font-size: 0.8em; margin: 15px 0;
+        }
+        .divider::before, .divider::after {
+            content: ''; flex-grow: 1; height: 1px; background: #333;
+        }
+        #login-error { color: #f44747; font-size: 0.85em; margin-top: 10px; display: none; }
+        #login-success { color: #019999; font-size: 0.85em; margin-top: 10px; display: none; }
+        .back-link { color: #019999; text-decoration: none; margin-top: 20px; display: inline-block; }
+        .back-link:hover { color: #fff; }
+        #signup-fields { display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🦍 Login</h1>
+        <p>Sign in to submit and manage your extensions</p>
+
+        <!-- Google Login -->
+        <button class="login-btn btn-google" onclick="loginWithGoogle()">🔐 Sign in with Google</button>
+
+        <div class="divider">or sign in with email</div>
+
+        <!-- Email Login -->
+        <input type="email" id="email" placeholder="Email address">
+        <input type="password" id="password" placeholder="Password">
+        <button class="login-btn btn-email" onclick="loginWithEmail()">Sign In</button>
+
+        <!-- Sign Up Fields -->
+        <div id="signup-fields">
+            <input type="text" id="signup-name" placeholder="Display name">
+        </div>
+        <button class="login-btn btn-signup" onclick="toggleSignup()" id="signup-toggle">Create Account</button>
+
+        <div id="login-error"></div>
+        <div id="login-success"></div>
+    </div>
+    <a href="extensions.html" class="back-link">← Back to Extensions Store</a>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAWOpJLYgdKAMGeSe2mPikKVVF_45AZCvA",
+        authDomain: "realgorilla-extensions.firebaseapp.com",
+        projectId: "realgorilla-extensions",
+        storageBucket: "realgorilla-extensions.firebasestorage.app",
+        messagingSenderId: "653765688280",
+        appId: "1:653765688280:web:b6ce5fbad78c3df28910ad"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+
+      let isSignup = false;
+
+      function toggleSignup() {
+        isSignup = !isSignup;
+        document.getElementById('signup-fields').style.display = isSignup ? 'block' : 'none';
+        document.getElementById('signup-toggle').textContent = isSignup ? 'Back to Sign In' : 'Create Account';
+        document.querySelector('.btn-email').textContent = isSignup ? 'Create Account' : 'Sign In';
+        document.getElementById('login-error').style.display = 'none';
+      }
+
+      function showError(msg) {
+        const err = document.getElementById('login-error');
+        err.textContent = msg;
+        err.style.display = 'block';
+        document.getElementById('login-success').style.display = 'none';
+      }
+
+      function showSuccess(msg) {
+        const suc = document.getElementById('login-success');
+        suc.textContent = msg;
+        suc.style.display = 'block';
+        document.getElementById('login-error').style.display = 'none';
+      }
+
+      function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).then(() => {
+          window.location.href = 'extensions.html';
+        }).catch(err => showError(err.message));
+      }
+
+      function loginWithEmail() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        if (!email || !password) { showError('Please fill in all fields.'); return; }
+
+        if (isSignup) {
+          const name = document.getElementById('signup-name').value || email.split('@')[0];
+          auth.createUserWithEmailAndPassword(email, password).then(result => {
+            return result.user.updateProfile({ displayName: name });
+          }).then(() => {
+            showSuccess('Account created! Redirecting...');
+            setTimeout(() => window.location.href = 'extensions.html', 1500);
+          }).catch(err => showError(err.message));
+        } else {
+          auth.signInWithEmailAndPassword(email, password).then(() => {
+            window.location.href = 'extensions.html';
+          }).catch(err => showError(err.message));
+        }
+      }
+    </script>
+</body>
+</html>

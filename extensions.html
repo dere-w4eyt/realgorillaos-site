@@ -89,7 +89,7 @@
     <!-- Login Bar -->
     <div id="login-bar">
         <span id="user-info">Not logged in</span>
-        <button id="login-btn" onclick="login()" class="nav-login-btn">🔐 Login with Google</button>
+        <button id="login-btn" onclick="window.location.href='login.html'" class="nav-login-btn">🔐 Login</button>
         <button id="logout-btn" onclick="logout()" class="nav-logout-btn" style="display:none;">Logout</button>
     </div>
 
@@ -158,15 +158,6 @@
       };
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
-      const provider = new firebase.auth.GoogleAuthProvider();
-
-      function login() {
-        auth.signInWithPopup(provider).then(result => {
-          document.getElementById('user-info').textContent = '🦍 ' + result.user.displayName;
-          document.getElementById('login-btn').style.display = 'none';
-          document.getElementById('logout-btn').style.display = 'inline-block';
-        }).catch(err => alert('Login failed: ' + err.message));
-      }
 
       function logout() {
         auth.signOut();
