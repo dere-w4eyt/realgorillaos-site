@@ -12,6 +12,11 @@
             color: white;
             min-height: 100vh;
         }
+        #login-bar { background:#111;padding:8px 20px;display:flex;justify-content:flex-end;align-items:center;gap:10px;font-size:13px;border-bottom:1px solid #222; }
+        #login-bar span { color:#aaa; }
+        #login-bar button { border:none;padding:6px 15px;border-radius:5px;cursor:pointer;font-weight:bold; }
+        .nav-login-btn { background:#019999;color:#000; }
+        .nav-logout-btn { background:#f44747;color:#fff; }
         .navbar {
             background: #111; border-bottom: 2px solid #019999;
             padding: 15px 30px; display: flex; align-items: center;
@@ -76,8 +81,18 @@
             .search-box { width: 100%; }
         }
     </style>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 </head>
 <body>
+    <!-- Login Bar -->
+    <div id="login-bar">
+        <span id="user-info">Not logged in</span>
+        <button id="login-btn" onclick="login()" class="nav-login-btn">🔐 Login with Google</button>
+        <button id="logout-btn" onclick="logout()" class="nav-logout-btn" style="display:none;">Logout</button>
+    </div>
+
     <nav class="navbar">
         <a href="extensions.html" class="logo">🧩 RealGorilla Store</a>
         <div class="nav-links">
@@ -130,6 +145,44 @@
     <footer>
         &copy; 2026 <a href="https://dere-w4eyt.github.io/realgorillaos-site/">RealGorillaOS</a> | <a href="https://dere-w4eyt.github.io/realgorillaos-site/">← Back to Main Site</a>
     </footer>
+
+    <!-- Firebase Auth -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAWOpJLYgdKAMGeSe2mPikKVVF_45AZCvA",
+        authDomain: "realgorilla-extensions.firebaseapp.com",
+        projectId: "realgorilla-extensions",
+        storageBucket: "realgorilla-extensions.firebasestorage.app",
+        messagingSenderId: "653765688280",
+        appId: "1:653765688280:web:b6ce5fbad78c3df28910ad"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      function login() {
+        auth.signInWithPopup(provider).then(result => {
+          document.getElementById('user-info').textContent = '🦍 ' + result.user.displayName;
+          document.getElementById('login-btn').style.display = 'none';
+          document.getElementById('logout-btn').style.display = 'inline-block';
+        }).catch(err => alert('Login failed: ' + err.message));
+      }
+
+      function logout() {
+        auth.signOut();
+        document.getElementById('user-info').textContent = 'Not logged in';
+        document.getElementById('login-btn').style.display = 'inline-block';
+        document.getElementById('logout-btn').style.display = 'none';
+      }
+
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          document.getElementById('user-info').textContent = '🦍 ' + user.displayName;
+          document.getElementById('login-btn').style.display = 'none';
+          document.getElementById('logout-btn').style.display = 'inline-block';
+        }
+      });
+    </script>
 
     <script>
         let allExtensions = [];
