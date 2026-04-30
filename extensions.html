@@ -7,79 +7,129 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: #0a0a0a;
+            font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+            background: #0f0f0f;
             color: white;
             min-height: 100vh;
         }
-        #login-bar { background:#111;padding:8px 20px;display:flex;justify-content:flex-end;align-items:center;gap:10px;font-size:13px;border-bottom:1px solid #222; }
-        #login-bar span { color:#aaa; cursor:pointer; }
-        #login-bar span:hover { color:#019999; }
-        #login-bar button { border:none;padding:6px 15px;border-radius:5px;cursor:pointer;font-weight:bold; }
-        .nav-login-btn { background:#019999;color:#000; }
-        .nav-logout-btn { background:#f44747;color:#fff; }
-        .navbar {
-            background: #111; border-bottom: 2px solid #019999;
-            padding: 15px 30px; display: flex; align-items: center;
-            justify-content: space-between; position: sticky; top: 0; z-index: 100;
+        
+        /* Top Login Bar */
+        #login-bar {
+            background: #0f0f0f; padding: 4px 20px;
+            display: flex; justify-content: flex-end; align-items: center;
+            gap: 12px; font-size: 13px; border-bottom: 1px solid #272727;
+            position: sticky; top: 0; z-index: 200;
         }
-        .navbar .logo { font-size: 1.5em; color: #019999; font-weight: bold; text-decoration: none; }
-        .navbar .nav-links { display: flex; gap: 20px; }
-        .navbar .nav-links a { color: #aaa; text-decoration: none; font-size: 0.9em; }
-        .navbar .nav-links a:hover, .navbar .nav-links a.active { color: #019999; }
-        .search-box { background: #1a1a1a; border: 1px solid #333; padding: 8px 15px; border-radius: 20px; color: white; font-size: 0.9em; width: 200px; }
-        .search-box:focus { outline: none; border-color: #019999; }
-        .hero { background: linear-gradient(135deg, #019999 0%, #090506 100%); padding: 60px 30px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
-        .hero-icon { font-size: 6em; flex-shrink: 0; }
-        .hero-content h1 { font-size: 2.5em; margin-bottom: 10px; }
-        .hero-content p { color: #ccc; font-size: 1.1em; margin-bottom: 20px; line-height: 1.5; }
-        .hero-btn { background: #000; color: #019999; padding: 12px 30px; border-radius: 10px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 1.1em; }
-        .hero-btn:hover { background: #fff; color: #000; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
-        .section-title { font-size: 1.8em; margin: 40px 0 20px; color: #019999; display: flex; align-items: center; gap: 10px; }
-        .section-title .count { font-size: 0.5em; color: #666; }
-        .categories { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
-        .category-btn { background: #1a1a1a; border: 1px solid #333; color: #aaa; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
-        .category-btn:hover, .category-btn.active { background: #019999; color: #000; border-color: #019999; }
-        .extensions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .ext-card { background: #1a1a1a; border: 1px solid #222; border-radius: 15px; padding: 20px; transition: all 0.2s; display: flex; flex-direction: column; }
-        .ext-card:hover { border-color: #019999; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(1,153,153,0.1); }
-        .ext-card .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .ext-card .card-icon { font-size: 2.5em; width: 60px; height: 60px; background: #0a0a0a; border-radius: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
-        .ext-card .card-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .ext-card .card-info h3 { font-size: 1.1em; margin-bottom: 2px; }
-        .ext-card .card-info h3 a { color: white; text-decoration: none; }
-        .ext-card .card-info h3 a:hover { color: #019999; }
-        .ext-card .card-info .developer { font-size: 0.8em; color: #666; }
-        .ext-card .stars { color: #ffcc00; font-size: 0.85em; margin: 5px 0; }
-        .ext-card .description { color: #aaa; font-size: 0.85em; line-height: 1.5; flex-grow: 1; margin-bottom: 15px; }
-        .ext-card .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-        .badge { padding: 4px 10px; border-radius: 15px; font-size: 0.7em; font-weight: bold; }
-        .badge-verified { background: #019999; color: #000; }
-        .badge-type { background: #333; color: #aaa; }
-        .badge-new { background: #6600ff; color: #fff; }
-        .install-btn { background: #019999; color: #000; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 0.9em; text-align: center; display: block; transition: all 0.2s; }
-        .install-btn:hover { background: #fff; }
-        .detail-btn { background: #333; color: #019999; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 0.9em; text-align: center; display: block; transition: all 0.2s; margin-top: 8px; }
-        .detail-btn:hover { background: #019999; color: #000; }
-        .featured-banner { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 2px solid #019999; border-radius: 15px; padding: 30px; margin: 30px 0; display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
-        .featured-banner .banner-icon { font-size: 4em; }
-        .featured-banner h2 { color: #019999; margin-bottom: 5px; }
-        .featured-banner .tagline { color: #ccc; }
-        .submit-banner { background: #1a1a1a; border: 2px dashed #019999; border-radius: 15px; padding: 40px; text-align: center; margin: 40px 0; }
-        .submit-banner h2 { color: #019999; margin-bottom: 10px; }
-        .submit-banner p { color: #aaa; margin-bottom: 20px; }
-        .submit-btn { background: #019999; color: #000; padding: 14px 35px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 1.1em; }
-        .submit-btn:hover { background: #fff; }
-        footer { text-align: center; padding: 30px; color: #444; font-size: 0.8em; border-top: 1px solid #111; margin-top: 40px; }
-        footer a { color: #019999; text-decoration: none; }
-        .loading { text-align: center; padding: 40px; color: #666; font-size: 1.2em; }
-        .no-results { text-align: center; padding: 40px; color: #666; }
+        #login-bar span { color: #aaa; cursor: pointer; }
+        #login-bar span:hover { color: #fff; }
+        #login-bar button { border: none; padding: 6px 15px; border-radius: 18px; cursor: pointer; font-weight: 500; font-size: 13px; }
+        .nav-login-btn { background: #3ea6ff; color: #0f0f0f; }
+        .nav-login-btn:hover { background: #65b8ff; }
+        .nav-logout-btn { background: #272727; color: #fff; }
+        .nav-logout-btn:hover { background: #3f3f3f; }
+        
+        /* Main Layout */
+        .main-layout { display: flex; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 180px; min-height: calc(100vh - 45px);
+            background: #0f0f0f; padding: 12px 0;
+            position: sticky; top: 45px; border-right: 1px solid #272727;
+        }
+        .sidebar a, .sidebar button {
+            display: flex; align-items: center; gap: 16px;
+            padding: 8px 20px; color: #fff; text-decoration: none;
+            font-size: 13px; width: 100%; border: none; background: none;
+            cursor: pointer; border-radius: 8px; margin: 0 4px; text-align: left;
+        }
+        .sidebar a:hover, .sidebar button:hover { background: #272727; }
+        .sidebar a.active, .sidebar button.active { background: #272727; font-weight: 500; }
+        .sidebar .icon { font-size: 18px; width: 22px; text-align: center; }
+        .sidebar .divider { height: 1px; background: #272727; margin: 10px 16px; }
+        .sidebar h3 { padding: 8px 20px; color: #aaa; font-size: 13px; font-weight: 500; }
+        
+        /* Main Content */
+        .main-content { flex-grow: 1; padding: 24px 30px; max-width: calc(100vw - 180px); }
+        
+        /* Categories Chips */
+        .chips { display: flex; gap: 10px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; }
+        .chip {
+            background: #272727; color: #fff; border: none;
+            padding: 7px 14px; border-radius: 8px; cursor: pointer;
+            font-size: 13px; white-space: nowrap; transition: background 0.2s;
+        }
+        .chip:hover { background: #3f3f3f; }
+        .chip.active { background: #fff; color: #0f0f0f; font-weight: 500; }
+        
+        /* Extension Grid */
+        .extensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 18px;
+        }
+        
+        /* Card */
+        .ext-card {
+            background: #1a1a1a; border-radius: 12px;
+            overflow: hidden; cursor: pointer; transition: transform 0.2s;
+            display: flex; flex-direction: column;
+        }
+        .ext-card:hover { transform: scale(1.02); }
+        .ext-card .thumbnail {
+            width: 100%; height: 170px; background: #272727;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 4em; position: relative;
+        }
+        .ext-card .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .ext-card .card-body { padding: 14px; flex-grow: 1; display: flex; gap: 10px; }
+        .ext-card .card-icon {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #272727; display: flex; align-items: center;
+            justify-content: center; font-size: 1.5em; flex-shrink: 0;
+        }
+        .ext-card .card-info { flex-grow: 1; min-width: 0; }
+        .ext-card .card-info h3 {
+            font-size: 14px; font-weight: 500; margin-bottom: 4px;
+            color: #fff; display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .ext-card .card-info h3 a { color: #fff; text-decoration: none; }
+        .ext-card .card-info h3 a:hover { color: #3ea6ff; }
+        .ext-card .card-info .meta {
+            font-size: 12px; color: #aaa; display: flex; gap: 6px; flex-wrap: wrap;
+        }
+        .ext-card .card-info .meta span { display: flex; align-items: center; gap: 3px; }
+        .ext-card .card-actions {
+            display: flex; gap: 8px; padding: 0 14px 14px;
+        }
+        .ext-card .card-actions a {
+            flex: 1; text-align: center; padding: 8px; border-radius: 18px;
+            font-size: 13px; font-weight: 500; text-decoration: none;
+        }
+        .btn-install { background: #3ea6ff; color: #0f0f0f; }
+        .btn-install:hover { background: #65b8ff; }
+        .btn-details { background: #272727; color: #fff; }
+        .btn-details:hover { background: #3f3f3f; }
+        
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, #1a3a4a 0%, #0f0f0f 100%);
+            border-radius: 12px; padding: 30px; margin-bottom: 24px;
+            display: flex; align-items: center; gap: 30px;
+        }
+        .hero-banner .banner-icon { font-size: 5em; }
+        .hero-banner h1 { font-size: 1.8em; margin-bottom: 6px; }
+        .hero-banner p { color: #aaa; font-size: 14px; }
+        
+        .loading { text-align: center; padding: 60px; color: #aaa; font-size: 16px; }
+        .no-results { text-align: center; padding: 60px; color: #aaa; }
+        footer { text-align: center; padding: 20px; color: #555; font-size: 12px; }
+        
         @media (max-width: 768px) {
-            .hero { padding: 30px 20px; text-align: center; flex-direction: column; }
-            .hero-content h1 { font-size: 1.8em; }
-            .navbar { padding: 10px 15px; flex-wrap: wrap; gap: 10px; }
-            .search-box { width: 100%; }
+            .sidebar { display: none; }
+            .main-content { max-width: 100%; padding: 16px; }
+            .hero-banner { flex-direction: column; text-align: center; }
         }
     </style>
     <!-- Firebase -->
@@ -87,64 +137,56 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <!-- Login Bar -->
     <div id="login-bar">
         <span id="user-info" onclick="if(auth.currentUser) window.location.href='profile.html'">Not logged in</span>
         <button id="login-btn" onclick="window.location.href='login.html'" class="nav-login-btn">🔐 Login</button>
         <button id="logout-btn" onclick="logout()" class="nav-logout-btn" style="display:none;">Logout</button>
     </div>
 
-    <nav class="navbar">
-        <a href="extensions.html" class="logo">🧩 RealGorilla Store</a>
-        <div class="nav-links">
-            <a href="#" class="active" onclick="filterExtensions('all')">Discover</a>
-            <a href="#" onclick="filterExtensions('adblock')">Ad Blockers</a>
-            <a href="#" onclick="filterExtensions('theme')">Themes</a>
-            <a href="#" onclick="filterExtensions('privacy')">Privacy</a>
-            <a href="#" onclick="filterExtensions('tools')">Tools</a>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="#" class="active" onclick="filterExtensions('all')"><span class="icon">🏠</span> Home</a>
+            <a href="#" onclick="filterExtensions('adblock')"><span class="icon">🛡️</span> Ad Blockers</a>
+            <a href="#" onclick="filterExtensions('theme')"><span class="icon">🎨</span> Themes</a>
+            <a href="#" onclick="filterExtensions('privacy')"><span class="icon">🔒</span> Privacy</a>
+            <a href="#" onclick="filterExtensions('tools')"><span class="icon">🔧</span> Tools</a>
+            <a href="#" onclick="filterExtensions('fun')"><span class="icon">🎮</span> Fun</a>
+            <div class="divider"></div>
+            <h3>Account</h3>
+            <a href="submit.html"><span class="icon">🚀</span> Submit Extension</a>
+            <a href="profile.html"><span class="icon">👤</span> My Profile</a>
         </div>
-        <input type="text" class="search-box" placeholder="🔍 Search extensions..." oninput="searchExtensions(this.value)">
-    </nav>
 
-    <div class="hero">
-        <div class="hero-icon">🦍</div>
-        <div class="hero-content">
-            <h1>RealGorilla Store</h1>
-            <p>Verified extensions for RealGorilla Browser. All submissions scanned with VirusTotal for your safety.</p>
-            <a href="submit.html" class="hero-btn">🚀 Submit Your Extension</a>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="featured-banner">
-            <div class="banner-icon">🔍</div>
-            <div>
-                <h2>🔒 Every Extension Scanned</h2>
-                <p class="tagline">All extensions are verified with <strong>VirusTotal</strong> before appearing in the store.</p>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Chips -->
+            <div class="chips">
+                <button class="chip active" onclick="filterExtensions('all')">All</button>
+                <button class="chip" onclick="filterExtensions('adblock')">Ad Blockers</button>
+                <button class="chip" onclick="filterExtensions('theme')">Themes</button>
+                <button class="chip" onclick="filterExtensions('privacy')">Privacy</button>
+                <button class="chip" onclick="filterExtensions('tools')">Tools</button>
+                <button class="chip" onclick="filterExtensions('fun')">Fun</button>
             </div>
-        </div>
 
-        <div class="categories">
-            <button class="category-btn active" onclick="filterExtensions('all')">All</button>
-            <button class="category-btn" onclick="filterExtensions('adblock')">🛡️ Ad Blockers</button>
-            <button class="category-btn" onclick="filterExtensions('theme')">🎨 Themes</button>
-            <button class="category-btn" onclick="filterExtensions('privacy')">🔒 Privacy</button>
-            <button class="category-btn" onclick="filterExtensions('tools')">🔧 Tools</button>
-        </div>
+            <!-- Hero -->
+            <div class="hero-banner">
+                <div class="banner-icon">🦍</div>
+                <div>
+                    <h1>RealGorilla Extension Store</h1>
+                    <p>Verified extensions for RealGorilla Browser. All submissions scanned with VirusTotal.</p>
+                </div>
+            </div>
 
-        <div class="section-title">📦 All Extensions <span class="count" id="ext-count"></span></div>
-        <div id="extensions-grid" class="extensions-grid loading">🔄 Loading extensions...</div>
-        <div id="no-results" class="no-results" style="display:none;">😕 No extensions found.</div>
-
-        <div class="submit-banner">
-            <h2>🚀 Got an Extension?</h2>
-            <p>Share your creation with the RealGorilla community.</p>
-            <a href="submit.html" class="submit-btn">Submit Your Extension</a>
+            <!-- Grid -->
+            <div id="extensions-grid" class="extensions-grid loading">Loading extensions...</div>
+            <div id="no-results" class="no-results" style="display:none;">😕 No extensions found.</div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 <a href="https://dere-w4eyt.github.io/realgorillaos-site/">RealGorillaOS</a> | <a href="https://dere-w4eyt.github.io/realgorillaos-site/">← Back to Main Site</a>
+        &copy; 2026 RealGorillaOS | <a href="https://dere-w4eyt.github.io/realgorillaos-site/" style="color:#555;">Back to Main Site</a>
     </footer>
 
     <!-- Firebase Auth -->
@@ -195,35 +237,31 @@
         function renderExtensions() {
             let filtered = currentFilter === 'all' ? allExtensions : allExtensions.filter(e => e.type === currentFilter);
             const grid = document.getElementById('extensions-grid');
-            const count = document.getElementById('ext-count');
             const noResults = document.getElementById('no-results');
-            count.textContent = `(${filtered.length})`;
             if (filtered.length === 0) { grid.innerHTML = ''; noResults.style.display = 'block'; return; }
             noResults.style.display = 'none';
             grid.innerHTML = filtered.map((ext, i) => {
                 const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
                 const rating = ext.rating ? ext.rating.toFixed(1) : '0.0';
                 const downloads = ext.downloads || 0;
-                const ratingCount = ext.rating_count || 0;
-                const isNew = i === allExtensions.length - 1;
                 return `
-                    <div class="ext-card">
-                        <div class="card-header">
+                    <div class="ext-card" onclick="window.location.href='app.html?id=${ext.id}'">
+                        <div class="thumbnail">${iconHtml}</div>
+                        <div class="card-body">
                             <div class="card-icon">${iconHtml}</div>
                             <div class="card-info">
                                 <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
-                                <div class="developer">by ${ext.author}</div>
-                                <div class="stars">★★★★★ ${rating} • ${ratingCount} reviews • ${downloads.toLocaleString()} downloads</div>
+                                <div class="meta">
+                                    <span>by ${ext.author}</span>
+                                    <span>⭐ ${rating}</span>
+                                    <span>📥 ${downloads.toLocaleString()}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="meta">
-                            <span class="badge badge-verified">✅ Verified</span>
-                            <span class="badge badge-type">${ext.type}</span>
-                            ${isNew ? '<span class="badge badge-new">NEW</span>' : ''}
+                        <div class="card-actions">
+                            <a href="${ext.url}" download class="btn-install" onclick="event.stopPropagation()">⬇ Install</a>
+                            <a href="app.html?id=${ext.id}" class="btn-details" onclick="event.stopPropagation()">📄 Details</a>
                         </div>
-                        <p class="description">${ext.description}</p>
-                        <a href="${ext.url}" download class="install-btn">⬇ Install</a>
-                        <a href="app.html?id=${ext.id}" class="detail-btn">📄 View Details & Reviews</a>
                     </div>
                 `;
             }).join('');
@@ -231,36 +269,9 @@
         
         function filterExtensions(type) {
             currentFilter = type;
-            document.querySelectorAll('.category-btn, .nav-links a').forEach(b => b.classList.remove('active'));
-            document.querySelector(`[onclick="filterExtensions('${type}')"]`)?.classList.add('active');
+            document.querySelectorAll('.sidebar a, .chip').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll(`[onclick="filterExtensions('${type}')"]`).forEach(b => b.classList.add('active'));
             renderExtensions();
-        }
-        
-        function searchExtensions(query) {
-            if (!query) { renderExtensions(); return; }
-            const q = query.toLowerCase();
-            const filtered = allExtensions.filter(e => e.name.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) || e.author.toLowerCase().includes(q));
-            document.getElementById('extensions-grid').innerHTML = filtered.map((ext, i) => {
-                const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
-                return `
-                    <div class="ext-card">
-                        <div class="card-header">
-                            <div class="card-icon">${iconHtml}</div>
-                            <div class="card-info">
-                                <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
-                                <div class="developer">by ${ext.author}</div>
-                            </div>
-                        </div>
-                        <div class="meta">
-                            <span class="badge badge-verified">✅ Verified</span>
-                            <span class="badge badge-type">${ext.type}</span>
-                        </div>
-                        <p class="description">${ext.description}</p>
-                        <a href="${ext.url}" download class="install-btn">⬇ Install</a>
-                        <a href="app.html?id=${ext.id}" class="detail-btn">📄 View Details & Reviews</a>
-                    </div>
-                `;
-            }).join('') || '<p class="no-results">😕 No extensions found.</p>';
         }
         
         loadExtensions();
