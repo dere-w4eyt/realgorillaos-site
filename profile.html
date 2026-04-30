@@ -12,8 +12,6 @@
             color: white;
             min-height: 100vh;
         }
-        
-        /* Top Bar */
         #login-bar {
             background: #0f0f0f; padding: 4px 24px;
             display: flex; justify-content: flex-end; align-items: center;
@@ -26,14 +24,7 @@
         .btn-blue:hover { background: #65b8ff; }
         .btn-dark { background: #272727; color: #fff; }
         .btn-dark:hover { background: #3f3f3f; }
-        
-        /* Channel Banner */
-        .banner {
-            background: linear-gradient(135deg, #1a3a4a 0%, #0f0f0f 100%);
-            height: 150px;
-        }
-        
-        /* Profile Info Section */
+        .banner { background: linear-gradient(135deg, #1a3a4a 0%, #0f0f0f 100%); height: 150px; }
         .profile-header {
             padding: 0 24px; display: flex; align-items: center;
             gap: 20px; margin-top: -50px; margin-bottom: 30px;
@@ -48,9 +39,7 @@
         .profile-info { flex-grow: 1; padding-bottom: 8px; }
         .profile-info h1 { font-size: 1.8em; margin-bottom: 2px; }
         .profile-info .handle { color: #aaa; font-size: 13px; margin-bottom: 4px; }
-        .profile-info .stats {
-            display: flex; gap: 20px; color: #aaa; font-size: 13px; margin-top: 8px;
-        }
+        .profile-info .stats { display: flex; gap: 20px; color: #aaa; font-size: 13px; margin-top: 8px; }
         .profile-info .stats span { display: flex; align-items: center; gap: 4px; }
         .edit-btn {
             background: #272727; color: #fff; border: none;
@@ -58,8 +47,6 @@
             font-weight: 500; font-size: 13px; margin-top: 8px;
         }
         .edit-btn:hover { background: #3f3f3f; }
-        
-        /* Tabs */
         .tabs {
             display: flex; gap: 0; border-bottom: 1px solid #272727;
             padding: 0 24px; margin-bottom: 24px;
@@ -71,8 +58,6 @@
         }
         .tab:hover { color: #fff; }
         .tab.active { color: #fff; border-bottom-color: #3ea6ff; }
-        
-        /* Content Grid */
         .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -100,8 +85,6 @@
             -webkit-box-orient: vertical; overflow: hidden;
         }
         .ext-card .card-info .meta { font-size: 11px; color: #aaa; }
-        
-        /* Edit Modal */
         .modal-overlay {
             display: none; position: fixed; inset: 0;
             background: rgba(0,0,0,0.8); z-index: 999;
@@ -130,7 +113,6 @@
             padding: 10px 24px; border-radius: 18px; cursor: pointer;
             font-weight: 500; width: 100%; margin-top: 8px;
         }
-        
         .no-content { text-align: center; padding: 60px 24px; color: #aaa; }
         .no-content a { color: #3ea6ff; }
         .loading { text-align: center; padding: 60px; color: #aaa; }
@@ -153,10 +135,7 @@
     </div>
 
     <div id="profile-content" style="display:none;">
-        <!-- Banner -->
         <div class="banner"></div>
-
-        <!-- Profile Header -->
         <div class="profile-header">
             <div class="avatar-large" id="avatar-display">🦍</div>
             <div class="profile-info">
@@ -169,14 +148,10 @@
                 <button class="edit-btn" onclick="openEditModal()">✏️ Edit Profile</button>
             </div>
         </div>
-
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab active" onclick="showTab('extensions', this)">🧩 Extensions</button>
             <button class="tab" onclick="showTab('about', this)">ℹ️ About</button>
         </div>
-
-        <!-- Content -->
         <div id="extensions-tab">
             <div id="extensions-grid" class="content-grid loading">Loading extensions...</div>
             <div id="no-extensions" class="no-content" style="display:none;">
@@ -191,7 +166,6 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div class="modal-overlay" id="edit-modal">
         <div class="modal">
             <h2>✏️ Edit Profile</h2>
@@ -243,7 +217,6 @@
             let totalDownloads = 0;
             myExtensions.forEach(e => totalDownloads += (e.downloads || 0));
             document.getElementById('total-downloads').textContent = totalDownloads;
-            
             const grid = document.getElementById('extensions-grid');
             const noExt = document.getElementById('no-extensions');
             if (myExtensions.length === 0) { grid.style.display = 'none'; noExt.style.display = 'block'; return; }
@@ -281,7 +254,6 @@
           document.getElementById('login-warning').style.display = 'none';
           document.getElementById('profile-content').style.display = 'block';
           document.getElementById('display-email').textContent = user.email;
-          
           const doc = await db.collection('profiles').doc(user.uid).get();
           if (doc.exists) {
             const data = doc.data();
@@ -305,28 +277,24 @@
         const user = auth.currentUser;
         if (!user) return;
         const username = document.getElementById('edit-username').value.trim();
-        if (!username) { document.getElementById('modal-status').textContent = '❌ Please enter a username.'; return; }
-        
-        const existing = await db.collection('profiles').where('username', '==', username).get();
-        if (!existing.empty && existing.docs[0].id !== user.uid) {
-          document.getElementById('modal-status').textContent = '❌ Username taken.';
-          return;
+        const status = document.getElementById('modal-status');
+        if (!username) { status.textContent = '❌ Please enter a username.'; return; }
+        try {
+          await db.collection('profiles').doc(user.uid).set({
+            username: username,
+            bio: document.getElementById('edit-bio').value.trim(),
+            avatar: document.getElementById('edit-avatar').value.trim() || '🦍',
+            email: user.email,
+            updatedAt: new Date().toISOString()
+          });
+          document.getElementById('display-username').textContent = '@' + username;
+          document.getElementById('display-bio').textContent = document.getElementById('edit-bio').value.trim() || 'No bio yet.';
+          document.getElementById('avatar-display').textContent = document.getElementById('edit-avatar').value.trim() || '🦍';
+          status.textContent = '✅ Saved!';
+          setTimeout(closeEditModal, 1000);
+        } catch(e) {
+          status.textContent = '❌ Error: ' + e.message;
         }
-        
-        const data = {
-          username: username,
-          bio: document.getElementById('edit-bio').value.trim(),
-          avatar: document.getElementById('edit-avatar').value.trim() || '🦍',
-          email: user.email,
-          updatedAt: new Date().toISOString()
-        };
-        await db.collection('profiles').doc(user.uid).set(data);
-        
-        document.getElementById('display-username').textContent = '@' + username;
-        document.getElementById('display-bio').textContent = data.bio || 'No bio yet.';
-        document.getElementById('avatar-display').textContent = data.avatar;
-        document.getElementById('modal-status').textContent = '✅ Saved!';
-        setTimeout(closeEditModal, 1000);
       }
     </script>
 </body>
