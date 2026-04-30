@@ -118,7 +118,6 @@
         .loading { text-align: center; padding: 60px; color: #aaa; }
         footer { text-align: center; padding: 20px; color: #555; font-size: 12px; }
     </style>
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -129,11 +128,9 @@
         <button id="login-btn" onclick="window.location.href='login.html'" class="btn-blue">🔐 Login</button>
         <button id="logout-btn" onclick="logout()" class="btn-dark" style="display:none;">Logout</button>
     </div>
-
     <div id="login-warning" style="text-align:center;padding:60px;color:#aaa;font-size:16px;">
         ⚠️ Please <a href="login.html" style="color:#3ea6ff;">log in</a> to view your profile.
     </div>
-
     <div id="profile-content" style="display:none;">
         <div class="banner"></div>
         <div class="profile-header">
@@ -145,7 +142,7 @@
                     <span>🧩 <b id="ext-count">0</b> extensions</span>
                     <span>📥 <b id="total-downloads">0</b> downloads</span>
                 </div>
-                <button class="edit-btn" onclick="openEditModal()">✏️ Edit Profile</button>
+                <button class="edit-btn" id="edit-btn" onclick="openEditModal()">✏️ Edit Profile</button>
             </div>
         </div>
         <div class="tabs">
@@ -165,28 +162,17 @@
             </div>
         </div>
     </div>
-
     <div class="modal-overlay" id="edit-modal">
         <div class="modal">
             <h2>✏️ Edit Profile</h2>
-            <div class="form-group">
-                <label>🦍 Username</label>
-                <input type="text" id="edit-username" placeholder="@username" maxlength="20">
-            </div>
-            <div class="form-group">
-                <label>📝 Bio</label>
-                <input type="text" id="edit-bio" placeholder="Tell us about yourself" maxlength="100">
-            </div>
-            <div class="form-group">
-                <label>🎨 Avatar Emoji</label>
-                <input type="text" id="edit-avatar" placeholder="🦍" maxlength="2" style="font-size:2em;text-align:center;">
-            </div>
+            <div class="form-group"><label>🦍 Username</label><input type="text" id="edit-username" placeholder="@username" maxlength="20"></div>
+            <div class="form-group"><label>📝 Bio</label><input type="text" id="edit-bio" placeholder="Tell us about yourself" maxlength="100"></div>
+            <div class="form-group"><label>🎨 Avatar Emoji</label><input type="text" id="edit-avatar" placeholder="🦍" maxlength="2" style="font-size:2em;text-align:center;"></div>
             <button class="save-btn" onclick="saveProfile()">💾 Save</button>
             <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
             <div id="modal-status" style="text-align:center;margin-top:10px;font-size:13px;"></div>
         </div>
     </div>
-
     <footer>&copy; 2026 RealGorillaOS | <a href="extensions.html" style="color:#555;">Back to Store</a></footer>
 
     <script>
@@ -246,14 +232,49 @@
       }
 
       auth.onAuthStateChanged(async user => {
-        if (user) {
-          document.getElementById('user-info').textContent = '👤 ' + (user.displayName || 'My Profile');
-          document.getElementById('user-info').onclick = () => window.location.href = 'profile.html';
-          document.getElementById('login-btn').style.display = 'none';
-          document.getElementById('logout-btn').style.display = 'inline-block';
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewUser = urlParams.get('user');
+        
+        if (user || viewUser) {
+          if (user) {
+            document.getElementById('user-info').textContent = '👤 ' + (user.displayName || 'My Profile');
+            document.getElementById('user-info').onclick = () => window.location.href = 'profile.html';
+            document.getElementById('login-btn').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'inline-block';
+          }
           document.getElementById('login-warning').style.display = 'none';
           document.getElementById('profile-content').style.display = 'block';
+          
+          if (viewUser) {
+            document.getElementById('display-username').textContent = '@' + viewUser;
+            document.getElementById('display-email').textContent = '';
+            document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('avatar-display').textContent = '🧩';
+            try {
+              const r = await fetch('https://extensions-worker.realgorilla.workers.dev/extensions');
+              const allExt = await r.json();
+              const userExt = allExt.filter(ext => ext.author === viewUser);
+              document.getElementById('ext-count').textContent = userExt.length;
+              let dls = 0; userExt.forEach(e => dls += (e.downloads||0));
+              document.getElementById('total-downloads').textContent = dls;
+              document.getElementById('display-bio').textContent = userExt.length > 0 ? 'Extension developer' : 'No extensions yet.';
+              const grid = document.getElementById('extensions-grid');
+              const noExt = document.getElementById('no-extensions');
+              if (userExt.length === 0) { grid.style.display = 'none'; noExt.style.display = 'block'; }
+              else {
+                grid.style.display = 'grid'; noExt.style.display = 'none';
+                grid.innerHTML = userExt.map(ext => `
+                  <div class="ext-card" onclick="window.location.href='app.html?id=${ext.id}'">
+                    <div class="thumbnail">${ext.icon || '🧩'}</div>
+                    <div class="card-body"><div class="card-icon">${ext.icon || '🧩'}</div><div class="card-info"><h3>${ext.name}</h3><div class="meta">${ext.type} • ${(ext.downloads||0).toLocaleString()} downloads</div></div></div>
+                  </div>`).join('');
+              }
+            } catch(e) { document.getElementById('extensions-grid').innerHTML = '<p class="loading">⚠️ Could not load extensions.</p>'; }
+            return;
+          }
+          
           document.getElementById('display-email').textContent = user.email;
+          document.getElementById('edit-btn').style.display = 'inline-block';
           const doc = await db.collection('profiles').doc(user.uid).get();
           if (doc.exists) {
             const data = doc.data();
@@ -277,8 +298,7 @@
         const user = auth.currentUser;
         if (!user) return;
         const username = document.getElementById('edit-username').value.trim();
-        const status = document.getElementById('modal-status');
-        if (!username) { status.textContent = '❌ Please enter a username.'; return; }
+        if (!username) { document.getElementById('modal-status').textContent = '❌ Please enter a username.'; return; }
         try {
           await db.collection('profiles').doc(user.uid).set({
             username: username,
@@ -290,11 +310,9 @@
           document.getElementById('display-username').textContent = '@' + username;
           document.getElementById('display-bio').textContent = document.getElementById('edit-bio').value.trim() || 'No bio yet.';
           document.getElementById('avatar-display').textContent = document.getElementById('edit-avatar').value.trim() || '🦍';
-          status.textContent = '✅ Saved!';
+          document.getElementById('modal-status').textContent = '✅ Saved!';
           setTimeout(closeEditModal, 1000);
-        } catch(e) {
-          status.textContent = '❌ Error: ' + e.message;
-        }
+        } catch(e) { document.getElementById('modal-status').textContent = '❌ Error: ' + e.message; }
       }
     </script>
 </body>

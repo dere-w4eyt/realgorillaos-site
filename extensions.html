@@ -12,8 +12,6 @@
             color: white;
             min-height: 100vh;
         }
-        
-        /* Top Login Bar */
         #login-bar {
             background: #0f0f0f; padding: 4px 20px;
             display: flex; justify-content: flex-end; align-items: center;
@@ -27,11 +25,7 @@
         .nav-login-btn:hover { background: #65b8ff; }
         .nav-logout-btn { background: #272727; color: #fff; }
         .nav-logout-btn:hover { background: #3f3f3f; }
-        
-        /* Main Layout */
         .main-layout { display: flex; }
-        
-        /* Sidebar */
         .sidebar {
             width: 180px; min-height: calc(100vh - 45px);
             background: #0f0f0f; padding: 12px 0;
@@ -48,11 +42,7 @@
         .sidebar .icon { font-size: 18px; width: 22px; text-align: center; }
         .sidebar .divider { height: 1px; background: #272727; margin: 10px 16px; }
         .sidebar h3 { padding: 8px 20px; color: #aaa; font-size: 13px; font-weight: 500; }
-        
-        /* Main Content */
         .main-content { flex-grow: 1; padding: 24px 30px; max-width: calc(100vw - 180px); }
-        
-        /* Categories Chips */
         .chips { display: flex; gap: 10px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; }
         .chip {
             background: #272727; color: #fff; border: none;
@@ -61,15 +51,11 @@
         }
         .chip:hover { background: #3f3f3f; }
         .chip.active { background: #fff; color: #0f0f0f; font-weight: 500; }
-        
-        /* Extension Grid */
         .extensions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 18px;
         }
-        
-        /* Card */
         .ext-card {
             background: #1a1a1a; border-radius: 12px;
             overflow: hidden; cursor: pointer; transition: transform 0.2s;
@@ -111,8 +97,6 @@
         .btn-install:hover { background: #65b8ff; }
         .btn-details { background: #272727; color: #fff; }
         .btn-details:hover { background: #3f3f3f; }
-        
-        /* Hero Banner */
         .hero-banner {
             background: linear-gradient(135deg, #1a3a4a 0%, #0f0f0f 100%);
             border-radius: 12px; padding: 30px; margin-bottom: 24px;
@@ -121,18 +105,15 @@
         .hero-banner .banner-icon { font-size: 5em; }
         .hero-banner h1 { font-size: 1.8em; margin-bottom: 6px; }
         .hero-banner p { color: #aaa; font-size: 14px; }
-        
         .loading { text-align: center; padding: 60px; color: #aaa; font-size: 16px; }
         .no-results { text-align: center; padding: 60px; color: #aaa; }
         footer { text-align: center; padding: 20px; color: #555; font-size: 12px; }
-        
         @media (max-width: 768px) {
             .sidebar { display: none; }
             .main-content { max-width: 100%; padding: 16px; }
             .hero-banner { flex-direction: column; text-align: center; }
         }
     </style>
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 </head>
@@ -144,7 +125,6 @@
     </div>
 
     <div class="main-layout">
-        <!-- Sidebar -->
         <div class="sidebar">
             <a href="#" class="active" onclick="filterExtensions('all')"><span class="icon">🏠</span> Home</a>
             <a href="#" onclick="filterExtensions('adblock')"><span class="icon">🛡️</span> Ad Blockers</a>
@@ -158,9 +138,7 @@
             <a href="profile.html"><span class="icon">👤</span> My Profile</a>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Chips -->
             <div class="chips">
                 <button class="chip active" onclick="filterExtensions('all')">All</button>
                 <button class="chip" onclick="filterExtensions('adblock')">Ad Blockers</button>
@@ -169,27 +147,16 @@
                 <button class="chip" onclick="filterExtensions('tools')">Tools</button>
                 <button class="chip" onclick="filterExtensions('fun')">Fun</button>
             </div>
-
-            <!-- Hero -->
             <div class="hero-banner">
                 <div class="banner-icon">🦍</div>
-                <div>
-                    <h1>RealGorilla Extension Store</h1>
-                    <p>Verified extensions for RealGorilla Browser. All submissions scanned with VirusTotal.</p>
-                </div>
+                <div><h1>RealGorilla Extension Store</h1><p>Verified extensions for RealGorilla Browser. All submissions scanned with VirusTotal.</p></div>
             </div>
-
-            <!-- Grid -->
             <div id="extensions-grid" class="extensions-grid loading">Loading extensions...</div>
             <div id="no-results" class="no-results" style="display:none;">😕 No extensions found.</div>
         </div>
     </div>
+    <footer>&copy; 2026 RealGorillaOS | <a href="https://dere-w4eyt.github.io/realgorillaos-site/" style="color:#555;">Back to Main Site</a></footer>
 
-    <footer>
-        &copy; 2026 RealGorillaOS | <a href="https://dere-w4eyt.github.io/realgorillaos-site/" style="color:#555;">Back to Main Site</a>
-    </footer>
-
-    <!-- Firebase Auth -->
     <script>
       const firebaseConfig = {
         apiKey: "AIzaSyAWOpJLYgdKAMGeSe2mPikKVVF_45AZCvA",
@@ -209,7 +176,6 @@
         document.getElementById('login-btn').style.display = 'inline-block';
         document.getElementById('logout-btn').style.display = 'none';
       }
-
       auth.onAuthStateChanged(user => {
         if (user) {
           document.getElementById('user-info').textContent = '👤 ' + (user.displayName || 'My Profile');
@@ -218,63 +184,73 @@
           document.getElementById('logout-btn').style.display = 'inline-block';
         }
       });
-    </script>
 
-    <script>
-        let allExtensions = [];
-        let currentFilter = 'all';
-        
-        async function loadExtensions() {
-            try {
-                const response = await fetch('https://extensions-worker.realgorilla.workers.dev/extensions');
-                allExtensions = await response.json();
-                renderExtensions();
-            } catch (err) {
-                document.getElementById('extensions-grid').innerHTML = '<p style="color:#ff4444;">⚠️ Could not load extensions.</p>';
-            }
-        }
-        
-        function renderExtensions() {
-            let filtered = currentFilter === 'all' ? allExtensions : allExtensions.filter(e => e.type === currentFilter);
-            const grid = document.getElementById('extensions-grid');
-            const noResults = document.getElementById('no-results');
-            if (filtered.length === 0) { grid.innerHTML = ''; noResults.style.display = 'block'; return; }
-            noResults.style.display = 'none';
-            grid.innerHTML = filtered.map((ext, i) => {
-                const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
-                const rating = ext.rating ? ext.rating.toFixed(1) : '0.0';
-                const downloads = ext.downloads || 0;
-                return `
-                    <div class="ext-card" onclick="window.location.href='app.html?id=${ext.id}'">
-                        <div class="thumbnail">${iconHtml}</div>
-                        <div class="card-body">
-                            <div class="card-icon">${iconHtml}</div>
-                            <div class="card-info">
-                                <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
-                                <div class="meta">
-                                    <span>by ${ext.author}</span>
-                                    <span>⭐ ${rating}</span>
-                                    <span>📥 ${downloads.toLocaleString()}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="${ext.url}" download class="btn-install" onclick="event.stopPropagation()">⬇ Install</a>
-                            <a href="app.html?id=${ext.id}" class="btn-details" onclick="event.stopPropagation()">📄 Details</a>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function filterExtensions(type) {
-            currentFilter = type;
-            document.querySelectorAll('.sidebar a, .chip').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll(`[onclick="filterExtensions('${type}')"]`).forEach(b => b.classList.add('active'));
-            renderExtensions();
-        }
-        
-        loadExtensions();
+      let allExtensions = []; let currentFilter = 'all';
+      async function loadExtensions() {
+        try {
+          const r = await fetch('https://extensions-worker.realgorilla.workers.dev/extensions');
+          allExtensions = await r.json(); renderExtensions();
+        } catch(e) { document.getElementById('extensions-grid').innerHTML = '<p style="color:#ff4444;">⚠️ Could not load extensions.</p>'; }
+      }
+      function renderExtensions() {
+        let filtered = currentFilter === 'all' ? allExtensions : allExtensions.filter(e => e.type === currentFilter);
+        const grid = document.getElementById('extensions-grid');
+        const noResults = document.getElementById('no-results');
+        if (filtered.length === 0) { grid.innerHTML = ''; noResults.style.display = 'block'; return; }
+        noResults.style.display = 'none';
+        grid.innerHTML = filtered.map((ext, i) => {
+          const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
+          return `
+            <div class="ext-card" onclick="window.location.href='app.html?id=${ext.id}'">
+              <div class="thumbnail">${iconHtml}</div>
+              <div class="card-body">
+                <div class="card-icon">${iconHtml}</div>
+                <div class="card-info">
+                  <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
+                  <div class="meta">
+                    <span>by <a href="profile.html?user=${encodeURIComponent(ext.author)}" style="color:#3ea6ff;text-decoration:none;" onclick="event.stopPropagation()">${ext.author}</a></span>
+                    <span>⭐ ${(ext.rating||0).toFixed(1)}</span>
+                    <span>📥 ${(ext.downloads||0).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <a href="${ext.url}" download class="btn-install" onclick="event.stopPropagation()">⬇ Install</a>
+                <a href="app.html?id=${ext.id}" class="btn-details" onclick="event.stopPropagation()">📄 Details</a>
+              </div>
+            </div>`;
+        }).join('');
+      }
+      function filterExtensions(type) {
+        currentFilter = type;
+        document.querySelectorAll('.sidebar a, .chip').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll(`[onclick="filterExtensions('${type}')"]`).forEach(b => b.classList.add('active'));
+        renderExtensions();
+      }
+      function searchExtensions(query) {
+        if (!query) { renderExtensions(); return; }
+        const q = query.toLowerCase();
+        const filtered = allExtensions.filter(e => e.name.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) || e.author.toLowerCase().includes(q));
+        document.getElementById('extensions-grid').innerHTML = filtered.map((ext, i) => {
+          const iconHtml = ext.image_url ? `<img src="${ext.image_url}" alt="${ext.name}">` : (ext.icon || '🧩');
+          return `
+            <div class="ext-card" onclick="window.location.href='app.html?id=${ext.id}'">
+              <div class="thumbnail">${iconHtml}</div>
+              <div class="card-body">
+                <div class="card-icon">${iconHtml}</div>
+                <div class="card-info">
+                  <h3><a href="app.html?id=${ext.id}">${ext.name}</a></h3>
+                  <div class="meta"><span>by <a href="profile.html?user=${encodeURIComponent(ext.author)}" style="color:#3ea6ff;text-decoration:none;" onclick="event.stopPropagation()">${ext.author}</a></span></div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <a href="${ext.url}" download class="btn-install" onclick="event.stopPropagation()">⬇ Install</a>
+                <a href="app.html?id=${ext.id}" class="btn-details" onclick="event.stopPropagation()">📄 Details</a>
+              </div>
+            </div>`;
+        }).join('') || '<p class="no-results">😕 No extensions found.</p>';
+      }
+      loadExtensions();
     </script>
 </body>
 </html>
