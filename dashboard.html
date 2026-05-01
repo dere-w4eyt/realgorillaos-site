@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RealGorilla</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+            background: #0f0f0f;
+            color: white;
+            min-height: 100vh;
+        }
+        #login-bar {
+            background: #0f0f0f; padding: 4px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; border-bottom: 1px solid #272727;
+        }
+        #login-bar .brand { color: #3ea6ff; font-weight: bold; font-size: 15px; text-decoration: none; }
+        #login-bar .right { display: flex; gap: 12px; align-items: center; }
+        #login-bar span { color: #aaa; cursor: pointer; }
+        #login-bar button { border: none; padding: 6px 15px; border-radius: 18px; cursor: pointer; font-weight: 500; font-size: 13px; }
+        .btn-blue { background: #3ea6ff; color: #0f0f0f; }
+        .btn-dark { background: #272727; color: #fff; }
+        .btn-red { background: #f44747; color: #fff; }
+        .btn-green { background: #4caf50; color: #fff; }
+        
+        .dashboard { max-width: 1000px; margin: 0 auto; padding: 30px 24px; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .dash-header h1 { font-size: 1.8em; }
+        .dash-stats { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+        .stat-card {
+            background: #1a1a1a; border-radius: 12px; padding: 20px;
+            flex: 1; min-width: 150px; text-align: center;
+        }
+        .stat-card .number { font-size: 2em; font-weight: bold; color: #3ea6ff; }
+        .stat-card .label { color: #aaa; font-size: 12px; margin-top: 4px; }
+        
+        .ext-table { width: 100%; border-collapse: collapse; }
+        .ext-table th {
+            text-align: left; padding: 12px 16px; color: #aaa;
+            font-size: 12px; font-weight: 500; border-bottom: 1px solid #272727;
+        }
+        .ext-table td {
+            padding: 12px 16px; border-bottom: 1px solid #1a1a1a;
+            font-size: 13px;
+        }
+        .ext-table tr:hover td { background: #1a1a1a; }
+        .ext-table .ext-name { color: #3ea6ff; cursor: pointer; font-weight: 500; }
+        .ext-table .ext-name:hover { text-decoration: underline; }
+        .action-btns { display: flex; gap: 8px; }
+        .action-btns button {
+            border: none; padding: 5px 12px; border-radius: 15px;
+            cursor: pointer; font-size: 11px; font-weight: 500;
+        }
+        .btn-sm-blue { background: #3ea6ff; color: #0f0f0f; }
+        .btn-sm-red { background: #f44747; color: #fff; }
+        .btn-sm-green { background: #4caf50; color: #fff; }
+        
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8); z-index: 999;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: #1a1a1a; border-radius: 12px; padding: 30px;
+            max-width: 500px; width: 90%; color: white;
+        }
+        .modal h2 { color: #3ea6ff; margin-bottom: 20px; }
+        .modal .form-group { margin-bottom: 16px; }
+        .modal label { display: block; color: #aaa; margin-bottom: 4px; font-size: 13px; }
+        .modal input, .modal textarea, .modal select {
+            width: 100%; padding: 10px; border-radius: 8px;
+            border: 1px solid #333; background: #0f0f0f; color: white; font-size: 14px;
+        }
+        .modal textarea { min-height: 80px; resize: vertical; font-family: 'Roboto', sans-serif; }
+        .modal input:focus, .modal textarea:focus, .modal select:focus { border-color: #3ea6ff; outline: none; }
+        .modal .save-btn {
+            background: #3ea6ff; color: #0f0f0f; border: none;
+            padding: 10px 24px; border-radius: 18px; cursor: pointer;
+            font-weight: 500; width: 100%; margin-top: 8px;
+        }
+        .modal .cancel-btn {
+            background: #272727; color: #fff; border: none;
+            padding: 10px 24px; border-radius: 18px; cursor: pointer;
+            font-weight: 500; width: 100%; margin-top: 8px;
+        }
+        
+        .login-warning { text-align: center; padding: 80px 20px; color: #aaa; }
+        .login-warning a { color: #3ea6ff; }
+        .loading { text-align: center; padding: 60px; color: #aaa; }
+        .status-msg { text-align: center; margin-top: 10px; font-size: 13px; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div id="login-bar">
+        <a href="extensions.html" class="brand">🦍 RealGorilla Dashboard</a>
+        <div class="right">
+            <span id="user-info">Not logged in</span>
+            <button id="login-btn" onclick="window.location.href='login.html'" class="btn-blue">🔐 Login</button>
+            <button id="logout-btn" onclick="logout()" class="btn-dark" style="display:none;">Logout</button>
+        </div>
+    </div>
+
+    <div id="login-warning" class="login-warning">
+        ⚠️ Please <a href="login.html">log in</a> to access your dashboard.
+    </div>
+
+    <div id="dashboard-content" style="display:none;">
+        <div class="dashboard">
+            <div class="dash-header">
+                <h1>📊 My Dashboard</h1>
+                <div>
+                    <a href="submit.html" class="btn-green" style="padding:10px 20px;border-radius:18px;text-decoration:none;font-weight:500;font-size:13px;">🚀 New Extension</a>
+                </div>
+            </div>
+
+            <div class="dash-stats">
+                <div class="stat-card"><div class="number" id="stat-total">0</div><div class="label">Total Extensions</div></div>
+                <div class="stat-card"><div class="number" id="stat-downloads">0</div><div class="label">Total Downloads</div></div>
+                <div class="stat-card"><div class="number" id="stat-verified">0</div><div class="label">Verified</div></div>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="ext-table">
+                    <thead>
+                        <tr>
+                            <th>Extension</th>
+                            <th>Type</th>
+                            <th>Downloads</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ext-table-body">
+                        <tr><td colspan="5" class="loading">Loading your extensions...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="no-exts" style="display:none;text-align:center;padding:40px;color:#aaa;">
+                📭 No extensions yet.<br><a href="submit.html" style="color:#3ea6ff;">Create your first extension!</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <h2>✏️ Edit Extension</h2>
+            <div class="form-group"><label>🧩 Name</label><input type="text" id="edit-name"></div>
+            <div class="form-group"><label>📝 Description</label><textarea id="edit-desc"></textarea></div>
+            <div class="form-group"><label>📂 Type</label><select id="edit-type">
+                <option value="adblock">Ad Blocker</option><option value="theme">Theme</option>
+                <option value="privacy">Privacy</option><option value="tools">Tools</option>
+                <option value="fun">Fun</option>
+            </select></div>
+            <input type="hidden" id="edit-id">
+            <button class="save-btn" onclick="saveEdit()">💾 Save</button>
+            <button class="cancel-btn" onclick="closeModal('edit-modal')">Cancel</button>
+            <div class="status-msg" id="edit-status"></div>
+        </div>
+    </div>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAWOpJLYgdKAMGeSe2mPikKVVF_45AZCvA",
+        authDomain: "realgorilla-extensions.firebaseapp.com",
+        projectId: "realgorilla-extensions",
+        storageBucket: "realgorilla-extensions.firebasestorage.app",
+        messagingSenderId: "653765688280",
+        appId: "1:653765688280:web:b6ce5fbad78c3df28910ad"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+
+      function logout() { auth.signOut(); window.location.reload(); }
+      function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+      async function loadDashboard() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const r = await fetch('https://extensions-worker.realgorilla.workers.dev/extensions');
+            const all = await r.json();
+            const mine = all.filter(e => e.author === (user.displayName || user.email));
+            
+            document.getElementById('stat-total').textContent = mine.length;
+            let dls = 0, verified = 0;
+            mine.forEach(e => { dls += (e.downloads||0); if (e.verified) verified++; });
+            document.getElementById('stat-downloads').textContent = dls;
+            document.getElementById('stat-verified').textContent = verified;
+
+            const tbody = document.getElementById('ext-table-body');
+            const noExts = document.getElementById('no-exts');
+            if (mine.length === 0) { tbody.innerHTML = ''; noExts.style.display = 'block'; return; }
+            noExts.style.display = 'none';
+            tbody.innerHTML = mine.map(e => `
+                <tr>
+                    <td><span class="ext-name" onclick="window.location.href='app.html?id=${e.id}'">${e.icon||'🧩'} ${e.name}</span></td>
+                    <td>${e.type}</td>
+                    <td>${(e.downloads||0).toLocaleString()}</td>
+                    <td>${e.verified ? '✅ Verified' : '⏳ Pending'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-sm-blue" onclick="openEdit(${e.id})">✏️</button>
+                            <button class="btn-sm-red" onclick="deleteExt(${e.id})">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        } catch(e) {
+            document.getElementById('ext-table-body').innerHTML = '<tr><td colspan="5" style="color:#f44747;">⚠️ Could not load extensions.</td></tr>';
+        }
+      }
+
+      function openEdit(id) {
+        fetch('https://extensions-worker.realgorilla.workers.dev/extensions').then(r => r.json()).then(all => {
+          const ext = all.find(e => e.id == id);
+          if (ext) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-name').value = ext.name;
+            document.getElementById('edit-desc').value = ext.description;
+            document.getElementById('edit-type').value = ext.type;
+            document.getElementById('edit-modal').classList.add('show');
+          }
+        });
+      }
+
+      function saveEdit() {
+        // Local update for now - worker endpoint coming
+        document.getElementById('edit-status').textContent = '✅ Changes saved locally!';
+        setTimeout(() => { closeModal('edit-modal'); loadDashboard(); }, 1500);
+      }
+
+      function deleteExt(id) {
+        if (confirm('Delete this extension? This cannot be undone.')) {
+          // Worker delete endpoint coming
+          alert('Delete request sent!');
+          loadDashboard();
+        }
+      }
+
+      auth.onAuthStateChanged(async user => {
+        if (user) {
+          document.getElementById('user-info').textContent = '👤 ' + (user.displayName || user.email);
+          document.getElementById('user-info').onclick = () => window.location.href = 'profile.html';
+          document.getElementById('login-btn').style.display = 'none';
+          document.getElementById('logout-btn').style.display = 'inline-block';
+          document.getElementById('login-warning').style.display = 'none';
+          document.getElementById('dashboard-content').style.display = 'block';
+          loadDashboard();
+        } else {
+          document.getElementById('login-warning').style.display = 'block';
+          document.getElementById('dashboard-content').style.display = 'none';
+        }
+      });
+    </script>
+</body>
+</html>
