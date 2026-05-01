@@ -70,12 +70,10 @@
         }
         footer { text-align: center; padding: 20px; color: #444; font-size: 0.8em; margin-top: auto; }
     </style>
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <!-- Login Bar -->
     <div id="login-bar">
         <span id="user-info">Not logged in</span>
         <button id="login-btn" onclick="window.location.href='login.html'" class="nav-login-btn">🔐 Login to Submit</button>
@@ -124,7 +122,6 @@
 
     <footer>&copy; 2026 RealGorillaOS — Extensions verified with VirusTotal</footer>
 
-    <!-- Firebase Auth -->
     <script>
       const firebaseConfig = {
         apiKey: "AIzaSyAWOpJLYgdKAMGeSe2mPikKVVF_45AZCvA",
@@ -148,7 +145,7 @@
 
       auth.onAuthStateChanged(user => {
         if (user) {
-          document.getElementById('user-info').textContent = '🦍 ' + user.displayName;
+          document.getElementById('user-info').textContent = '🦍 ' + (user.displayName || user.email);
           document.getElementById('login-btn').style.display = 'none';
           document.getElementById('logout-btn').style.display = 'inline-block';
           document.getElementById('login-warning').style.display = 'none';
@@ -191,16 +188,14 @@
                 return;
             }
             
-            // For now, use the filename as URL placeholder
-            // In production, upload the ZIP to storage and get a URL
             const data = {
                 name: document.getElementById('ext-name').value,
                 author: document.getElementById('ext-author').value,
+                uid: user.uid,
                 description: document.getElementById('ext-desc').value,
                 url: 'https://github.com/dere-w4eyt/realgorilla-browser/releases/download/v1.0.0L/' + zipFile.name,
                 image_url: iconFile ? URL.createObjectURL(iconFile) : '',
                 email: user.email,
-                uid: user.uid,
                 zip_uploaded: true,
                 zip_filename: zipFile.name,
                 zip_size: zipFile.size
